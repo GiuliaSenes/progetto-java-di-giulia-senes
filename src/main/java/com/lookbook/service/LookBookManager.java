@@ -10,6 +10,8 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -138,7 +140,6 @@ public class LookBookManager {
     }
 
     private String formattaStampa(Object obj) {
-        // Pulisce simboli corrotti e mostra EUR in modo pulito
         String s = obj.toString();
         return s.replace("?", "").replace("€", "").replace("Prezzo=", "Prezzo=EUR ");
     }
@@ -366,10 +367,13 @@ public class LookBookManager {
         System.out.println("[OK] Utente aggiunto con successo! ID assegnato automaticamente: " + nuovoId + ". Totale utenti registrati: " + utenti.size());
     }
 
-    // 5. Esporta capi disponibili in CSV
+    // 5. Esporta capi disponibili in CSV con data corrente nel nome file
     public void esportaCapiDisponibili() {
         System.out.println("\n--- ESPORTAZIONE CAPI DISPONIBILI ---");
-        String nomeFile = "capi_disponibili.csv";
+        
+        String dataOdierna = LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy"));
+        String nomeFile = "capi_" + dataOdierna + ".csv";
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeFile, StandardCharsets.UTF_8))) {
             writer.write("ID;Tipologia;Taglia;Prezzo;Disponibile\n");
             int count = 0;
